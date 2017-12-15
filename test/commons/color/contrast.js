@@ -112,21 +112,37 @@ describe('color.Color', function () {
 		var white = new axe.commons.color.Color(255, 255, 255, 1);
 		var gray = new axe.commons.color.Color(128, 128, 128, 1);
 
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, false).isValid);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, false).contrastRatio > 4.5);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, false).expectedContrastRatio === 4.5);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, 400).isValid);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, 400).contrastRatio > 4.5);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(black, white, 8, 400).expectedContrastRatio === 4.5);
 		
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, false).isValid);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, false).contrastRatio > 3);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, false).expectedContrastRatio === 3);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, 400).isValid);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, 400).contrastRatio > 3);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 24, 400).expectedContrastRatio === 3);
 
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, true).isValid);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, true).contrastRatio > 3);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, true).expectedContrastRatio === 3);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, 700).isValid);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, 700).contrastRatio > 3);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 20, 700).expectedContrastRatio === 3);
 
-		assert.isFalse(axe.commons.color.hasValidContrastRatio(white, gray, 8, false).isValid);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 8, false).contrastRatio < 4.5);
-		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 8, false).expectedContrastRatio === 4.5);
+		assert.isFalse(axe.commons.color.hasValidContrastRatio(white, gray, 8, 400).isValid);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 8, 400).contrastRatio < 4.5);
+		assert.isTrue(axe.commons.color.hasValidContrastRatio(white, gray, 8, 400).expectedContrastRatio === 4.5);
+	});
+
+	it('should give sensible results for light-font compliance', function () {
+		var black = new axe.commons.color.Color(0, 0, 0, 1);
+		var white = new axe.commons.color.Color(255, 255, 255, 1);
+		var mediumblue = new axe.commons.color.Color(96, 96, 255, 1);
+
+		assert.isFalse(axe.commons.color.hasBestPracticeContrastRatio(black, white, 20, 300).isValid);
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(black, white, 20, 300).contrastRatio < 22);
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(black, white, 20, 300).expectedContrastRatio === 22);
+		
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(white, mediumblue, 24, 300).isValid);
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(white, mediumblue, 24, 300).contrastRatio > 4.5);
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(white, mediumblue, 24, 300).contrastRatio < 5);
+		assert.isTrue(axe.commons.color.hasBestPracticeContrastRatio(white, mediumblue, 24, 300).expectedContrastRatio ===
+		              4.5);
 	});
 
 	it('should count 1-1 ratios as visually hidden', function () {
